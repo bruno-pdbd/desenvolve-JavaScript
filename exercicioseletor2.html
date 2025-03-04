@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Curtidas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        input {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .clear-btn {
+            background-color: #dc3545;
+        }
+        .clear-btn:hover {
+            background-color: #a71d2a;
+        }
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sistema de Curtidas</h2>
+        <input type="text" id="nome" placeholder="Digite seu nome">
+        <button onclick="curtir()">Curtir</button>
+        <button class="clear-btn" onclick="limparCurtidas()">Limpar</button>
+        <p id="curtidas">Ninguém curtiu</p>
+    </div>
+
+    <script>
+        let curtidas = JSON.parse(localStorage.getItem("curtidas")) || [];
+        atualizarTexto();
+
+        function curtir() {
+            let nome = document.getElementById("nome").value.trim();
+            if (nome && !curtidas.includes(nome)) {
+                curtidas.push(nome);
+                localStorage.setItem("curtidas", JSON.stringify(curtidas));
+            }
+            atualizarTexto();
+        }
+
+        function atualizarTexto() {
+            let texto = "Ninguém curtiu";
+            if (curtidas.length === 1) {
+                texto = `${curtidas[0]} curtiu`;
+            } else if (curtidas.length === 2) {
+                texto = `${curtidas[0]} e ${curtidas[1]} curtiram`;
+            } else if (curtidas.length >= 3) {
+                texto = `${curtidas[0]}, ${curtidas[1]} e mais ${curtidas.length - 2} pessoas curtiram`;
+            }
+            document.getElementById("curtidas").innerText = texto;
+        }
+
+        function limparCurtidas() {
+            curtidas = [];
+            localStorage.removeItem("curtidas");
+            atualizarTexto();
+        }
+    </script>
+</body>
+</html>
